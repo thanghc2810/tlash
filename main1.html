@@ -26,8 +26,8 @@ createSphere()
 animate();
 
 function createSphere(){
-    var geometry = new THREE.SphereBufferGeometry( 5, 6, 6, 3, 5 );
-    var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    var geometry = new THREE.SphereBufferGeometry( 10, 32, 32);
+    var material  = new THREE.MeshPhongMaterial()
     var sphere = new THREE.Mesh( geometry, material );
     scene.add( sphere );
 
@@ -36,7 +36,7 @@ function createSphere(){
 function initScene(){
     renderer = new THREE.WebGLRenderer();
     renderer.setSize( WIDTH, HEIGHT );
-    renderer.setClearColor( 0xAA9966, 1 );
+    renderer.setClearColor( 0x000000, 1 );
     renderer.shadowMap.enabled = true;
     document.body.appendChild( renderer.domElement );
 
@@ -44,59 +44,29 @@ function initScene(){
     // scene.fog = new THREE.FogExp2( 0xAA9966, 0.015 );
 
     camera = new THREE.PerspectiveCamera( 60, WIDTH / HEIGHT, 1, 1000 );
-    camera.position.set( 0, 10, 0 );
-    // camera.position.set( 0, 100, 100 );
+    // camera.position.set( 0, 10, 0 );
+    camera.position.set( 0, 20, 50 );
     // camera.position.x = 0;
     // camera.position.z = 200;
     // camera.position.y = 100;
 
-    // light = new THREE.DirectionalLight( 0xffffff, 1 );
-    // light.position.set( 20, 40, -15 );
-    // light.target.position.copy( scene.position );
-    // light.castShadow = true;
-    // light.shadowCameraLeft = -60;
-    // light.shadowCameraTop = -60;
-    // light.shadowCameraRight = 60;
-    // light.shadowCameraBottom = 60;
-    // light.shadowCameraNear = 20;
-    // light.shadowCameraFar = 200;
-    // light.shadowBias = -.0001
-    // light.shadowMapWidth = light.shadowMapHeight = 2048;
-    // light.shadowDarkness = .7;
-    // scene.add( light );
+    light = new THREE.DirectionalLight( 0xffffff, 1 );
+    light.position.set( 20, 40, -15 );
+    light.target.position.copy( scene.position );
+    light.castShadow = true;
+    light.shadowCameraLeft = -60;
+    light.shadowCameraTop = -60;
+    light.shadowCameraRight = 60;
+    light.shadowCameraBottom = 60;
+    light.shadowCameraNear = 20;
+    light.shadowCameraFar = 200;
+    light.shadowBias = -.0001
+    light.shadowMapWidth = light.shadowMapHeight = 2048;
+    light.shadowDarkness = .7;
+    scene.add( light );
 
 
-    // Nguồn sáng bán cầu là loại có màu tô chuyển (gradient)
-    // tham số đầu tiên là màu trời, thứ 2 là màu đất,
-    // thứ 3 là cường độ ánh sáng
-    hemisphereLight = new THREE.HemisphereLight(0xaaaaaa,0x000000, .9)
 
-    // Nguồn sáng có hướng tỏa ra từ 1 vị trí nhất định
-    // Nó giống như mặt trời, nghĩa là các tia được tạo ra song song với nhau.
-    shadowLight = new THREE.DirectionalLight(0xffffff, .9);
-
-    // Đặt vị trí cho nguồn sáng
-    shadowLight.position.set(150, 350, 350);
-
-    // Cho phép phủ bóng
-    shadowLight.castShadow = true;
-
-    // cài đặt vùng nhìn thấy của bóng đổ
-    shadowLight.shadow.camera.left = -400;
-    shadowLight.shadow.camera.right = 400;
-    shadowLight.shadow.camera.top = 400;
-    shadowLight.shadow.camera.bottom = -400;
-    shadowLight.shadow.camera.near = 1;
-    shadowLight.shadow.camera.far = 1000;
-
-    // cài đặt độ phân giải của bóng đổ; càng cao càng đẹp,
-    // nhưng cũng càng nặng nề hơn
-    shadowLight.shadow.mapSize.width = 2048;
-    shadowLight.shadow.mapSize.height = 2048;
-
-    // thêm vào scene để kích hoạt
-    scene.add(hemisphereLight);
-    scene.add(shadowLight);
 
 }
 
