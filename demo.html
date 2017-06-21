@@ -1,49 +1,94 @@
-<!DOCTYPE html>
-<html lang="ja">
-  <head><meta charset="UTF-8"></head>
+<html>
+  <head>
+    <title>My first three.js app</title>
+    <style>
+      body { margin: 0; }
+      canvas { width: 100%; height: 100% }
+    </style>
+  </head>
   <body>
-    <script src="js/three.js"></script>
+    <script src="js/three.min.js"></script>
+    
     <script>
-      // (1)レンダラの初期化
-      var renderer = new THREE.WebGLRenderer({ antialias:true });
-      renderer.setSize(500, 500);
-      renderer.setClearColor(0x000000, 1);
-      document.body.appendChild(renderer.domElement);
- 
-      // (2)シーンの作成
       var scene = new THREE.Scene();
- 
-      // (3)カメラの作成
-      var camera = new THREE.PerspectiveCamera(15, 500 / 500);
-      camera.position = new THREE.Vector3(0, 0, 8);
-      camera.lookAt(new THREE.Vector3(0, 0, 0));
-      scene.add(camera);
- 
-      // (4)ライトの作成
-      var light = new THREE.DirectionalLight(0xcccccc);
-      light.position = new THREE.Vector3(0.577, 0.577, 0.577);
-      scene.add(light);
- 
-      var ambient = new THREE.AmbientLight(0x333333);
-      scene.add(ambient);
- 
-      // (5)表示する物体の作成
-      var geometry = new THREE.SphereGeometry(1, 32, 16);
-      var material = new THREE.MeshPhongMaterial({
-        color: 0xffffff, ambient: 0xffffff,
-        specular: 0xcccccc, shininess:50, metal:true,
-        map: THREE.ImageUtils.loadTexture('img/earth.jpg') });
-      var mesh = new THREE.Mesh(geometry, material);
-      scene.add(mesh);
- 
-      // (6)レンダリング
-      var baseTime = +new Date;
-      function render() {
-        requestAnimationFrame(render);
-        mesh.rotation.y = 0.3 * (+new Date - baseTime) / 1000;
-        renderer.render(scene, camera);
-      };
-      render();
+      var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+      var renderer = new THREE.WebGLRenderer();
+      renderer.setSize( window.innerWidth, window.innerHeight );
+      document.body.appendChild( renderer.domElement );
+
+      var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+      var material = new THREE.MeshBasicMaterial( { color: 0x00ffdd } );
+      var cube = new THREE.Mesh( geometry, material );
+      cube.position.set( 1, 1, 0 );
+      scene.add( cube );
+
+camera.position.z = 5;
+camera.position.y = 1;
+
+
+var geometry1 = new THREE.SphereGeometry( 1, 32, 32 );
+var material1 = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+var sphere = new THREE.Mesh( geometry1, material1 );
+scene.add( sphere );
+
+var loader = new THREE.FontLoader();
+
+loader.load( 'fonts/optimer_regular.typeface.json', function ( font ) {
+// ここにフォントを読み込んだあとの処琁E��記述
+
+// チE��ストオブジェクト�E作�E
+// 第1引数に作�Eする斁E��を持E��し、あとはパラメータ
+// font: 使用するフォント！Eypeface.jsで作�Eされたフォント！E
+// size: チE��ストサイズ
+// height: チE��スト�E奥行き
+// curveSegments: 曲線に使用する点の数
+// bevelEnabled: 斜体にするかどぁE��
+// bevelThickness: 斜体�E傾き度
+// bevelSize: アウトラインからどの程度傾けるぁE
+
+var textGeometry = new THREE.TextGeometry( 'ABC', {
+  font: font,
+  size: 10.0,
+  height: 5,
+  curveSegments: 10,
+  bevelThickness: 3,
+  bevelSize: 1.0,
+  bevelEnabled: true
+} );
+textGeometry.center();
+
+// マテリアルの作�E
+var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+
+// オブジェクト�E作�E
+// var text = new THREE.Mesh( textGeometry, material );
+var mesh = new THREE.Line( textGeometry, material );
+
+// オブジェクトをシーンに追加
+//scene.add( text );
+scene.add( mesh );
+
+} );
+function render(){
+  // requestAnimationFrameで自刁E�E身を呼び出し続けることでレンダリングを繰り返す
+  requestAnimationFrame( render );
+
+  // 3D斁E���E移勁E
+  // camera.position.x += 0.01;
+
+  // レンダリング�E�表示�E�E
+  renderer.render(scene,camera);
+
+  // controls.update();
+}
+render();
+
     </script>
   </body>
+          <div id="world"></div>
+        <div id="frame01"></div>
+<!--       </div>
+      <div class="col-md-6"> -->
+        <div id="frame02">dgdgd</div>
 </html>

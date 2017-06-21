@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head><meta charset="UTF-8">
+    <!-- <script src="js-old/three.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="js-old/three.min.js"></script>
+    <script src="js/Detector.js"></script>
+    <script src="js-old/OrbitControls.js"></script>
+
+
+  </head>
+
+  <style type="text/css">
+    #world {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: linear-gradient(#e4e0ba, #f7d9aa);
+    }    
+  </style>
+
+  <body style="margin:0; overflow:hidden;">
+    <script>
+    var scene,
+    camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH,
+    renderer, container, controls;
+
+      if(!Detector.webgl) Detector.addGetWebGLMessage();    
+
+  function initScene(){
+    renderer = new THREE.WebGLRenderer({ antialias:true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColorHex(0x000000, 1);
+    document.body.appendChild(renderer.domElement);
+
+    scene = new THREE.Scene();
+
+    var camera = new THREE.PerspectiveCamera(
+      15, window.innerWidth / window.innerHeight);
+    camera.position = new THREE.Vector3(0, 0, 8);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
+    scene.add(camera);
+
+    var light = new THREE.DirectionalLight(0xcccccc);
+    light.position = new THREE.Vector3(0.577, 0.577, 0.577);
+    var ambient = new THREE.AmbientLight(0x333333);
+    scene.add(light);
+    scene.add(ambient);  
+  }
+
+  function initEarth(){
+    var geometry = new THREE.SphereGeometry(0.5, 32, 32);
+    // var material = new THREE.MeshPhongMaterial({
+    //   color: 0xffffff, specular: 0xcccccc, shininess:50, ambient: 0xffffff,
+    //   map: THREE.ImageUtils.loadTexture('img/earth.jpg') });
+    var material  = new THREE.MeshPhongMaterial();
+    material.map    = THREE.ImageUtils.loadTexture('img/earthmap1k.jpg');
+
+    material.bumpMap = THREE.ImageUtils.loadTexture('img/earthbump1k.jpg');
+    material.bumpScale = 0.05;
+
+    material.specularMap    = THREE.ImageUtils.loadTexture('img/earthspec1k.jpg')
+    material.specular  = new THREE.Color('grey')
+    var mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);  
+  }
+
+  function render() {
+    // カメラコントロールを作成
+    controls = new THREE.OrbitControls(camera);
+    controls.center = new THREE.Vector3(0, 0, 0);
+
+    var baseTime = +new Date;
+      requestAnimationFrame(render);
+
+      // カメラの状態を更新
+      controls.update();
+
+      mesh.rotation.y = 0.3 * (+new Date - baseTime) / 1000;
+      renderer.render(scene, camera);  
+  }
+
+
+
+    function init(){
+
+        initScene();
+
+        initEarth();
+
+        render();
+
+      window.addEventListener('resize', function() {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+      }, false );        
+
+      }
+      init();
+    </script>  
+
+    <script type="text/javascript">
+
+
+
+
+      $( document ).ready(function() {
+          // init();
+      });      
+    </script>
+
+    <div id="world"></div>
+
+  </body>
+</html>
