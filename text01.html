@@ -43,7 +43,8 @@
 	<body>
 		<script src="js/three.min.js"></script>
 		<script src="js/TrackballControls.js"></script>
-     <script src="js/Detector.js"></script>
+	    <script src="js/Detector.js"></script>
+	    <script src="js/BendModifier.js"></script>
 
 
     <script>
@@ -51,6 +52,7 @@
     var scene, camera, renderer, container, controls, baseTime, mesh;
     var controls2, baseTime2, mesh2;
     var WIDTH = 400; HEIGHT = 400;
+    var modifier = new THREE.BendModifier();
 
       if(!Detector.webgl) Detector.addGetWebGLMessage();
 
@@ -121,13 +123,13 @@
 
       loader.load( 'fonts/optimer_regular.typeface.json', function ( font ) {
 
-      var textGeometry = new THREE.TextGeometry( 'ABC', {
+      var textGeometry = new THREE.TextGeometry( 'TEXT', {
         font: font,
-        size: 10.0,
-        height: 5,
-        curveSegments: 10,
-        bevelThickness: 3,
-        bevelSize: 1.0,
+        size: 0.2,
+        height: 0.1,
+        curveSegments: 0,
+        bevelThickness: 0,
+        bevelSize: 0,
         bevelEnabled: true
       } );
       textGeometry.center();
@@ -138,6 +140,15 @@
       // オブジェクト�E作�E
       // var text = new THREE.Mesh( textGeometry, material );
       var mesh = new THREE.Line( textGeometry, material );
+
+        var direction = new THREE.Vector3( -1, -1, 0 );
+        var axis =  new THREE.Vector3( 1, 1, 0 );
+        var angle = Math.PI / 6;
+
+
+        var textMaterial = new THREE.MeshPhongMaterial( { color: 0x62254a } );
+        var text3D = new THREE.Mesh( textGeometry, textMaterial );
+        modifier.set( direction, axis, angle ).modify( mesh.geometry );
 
       // オブジェクトをシーンに追加
       //scene.add( text );
@@ -173,7 +184,7 @@ render();
 
       initScene();  
 
-      initEarth();
+      // initEarth();
 
       // initEarth2();
 

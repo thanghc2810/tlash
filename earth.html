@@ -19,6 +19,7 @@
 
 
     <script src="js/TrackballControls.js"></script>
+    <script src="js/BendModifier.js"></script>
   </head>
 
   <style type="text/css">
@@ -34,6 +35,7 @@
     var controls2, baseTime2;
     var WIDTH = window.innerWidth/3; HEIGHT = window.innerWidth/3;
     var center_point;
+    var modifier = new THREE.BendModifier();
 
       if(!Detector.webgl) Detector.addGetWebGLMessage();
 
@@ -68,29 +70,33 @@
     }
 
     function initEarth(x, y, z){
-      var geometry = new THREE.SphereGeometry(1, 32, 32);
 
       // var material = new THREE.MeshPhongMaterial({
       //   color: 0xffffff, specular: 0xcccccc, shininess:50,
       //   map: THREE.ImageUtils.loadTexture('img/earth.jpg') });
 
-      var material = new THREE.MeshBasicMaterial( {overdraw: 0.5 } );
+      var geometry = new THREE.SphereGeometry(1, 32, 32);
+      var material = new THREE.MeshPhongMaterial();
       material.map    = THREE.ImageUtils.loadTexture('img/earth2.jpg');
 
-      // new THREE.Mesh(
-      //   new THREE.SphereGeometry(0.503, 32, 32),
-      //   new THREE.MeshPhongMaterial({
-      //     map: THREE.ImageUtils.loadTexture('images/fair_clouds_4k.png'),
-      //     transparent: true
-      //   })
-      // );
-      
+      var geometry_cloud = new THREE.SphereGeometry(1.01, 32, 32);
+      var material_cloud = new THREE.MeshPhongMaterial({
+        map:         THREE.ImageUtils.loadTexture('img/fair_clouds_4k.png'),
+        transparent: true
+      });
+
 
       // material.bumpMap = THREE.ImageUtils.loadTexture('img/earthbump1k.jpg');
       // material.bumpScale = 0.05;
 
       // material.specularMap    = THREE.ImageUtils.loadTexture('img/earthspec1k.jpg');
       // material.specular  = new THREE.Color('grey');
+      var mesh_cloud = new THREE.Mesh(geometry_cloud, material_cloud);
+
+      mesh_cloud.position.x = x;
+      mesh_cloud.position.y = y;
+      mesh_cloud.position.z = z;
+      scene.add(mesh_cloud);
 
       var mesh = new THREE.Mesh(geometry, material);
 
@@ -110,6 +116,7 @@
           controls.update();
 
           mesh.rotation.y = 0.3 * (+new Date - baseTime) / 1000;
+          mesh_cloud.rotation.y = 0.4 * (+new Date - baseTime) / 1000;
           renderer.render(scene, camera);
         };
         render();    
@@ -127,7 +134,10 @@
           curveSegments: 0,
           bevelThickness: 0,
           bevelSize: 0,
-          bevelEnabled: true
+          bevelEnabled: true,
+            weight: "bold",
+            style: "normal",
+
         } );
         textGeometry.center();
 
@@ -135,10 +145,22 @@
         var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 
         // オブジェクト
-        mesh3 = new THREE.Line( textGeometry, material );
-        // mesh3 = new THREE.Mesh( textGeometry, material );
+        // mesh3 = new THREE.Line( textGeometry, material );
+        mesh3 = new THREE.Mesh( textGeometry, material );
 
 
+        var direction = new THREE.Vector3( 0, 0, -1 );
+        var axis =  new THREE.Vector3( 0, 1, 0 );
+        var angle = Math.PI / 6;
+
+        var textMaterial = new THREE.MeshPhongMaterial( { color: 0x62254a } );
+        var text3D = new THREE.Mesh( textGeometry, textMaterial );
+        modifier.set( direction, axis, angle ).modify( mesh3.geometry );
+  
+        // textGeometry.computeBoundingBox();
+        // var textWidth = textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x;
+        // mesh3.position.set( -0.5 * textWidth, 500, 0 );
+        scene.add( mesh3 );
 
 
       center_point.add( mesh3 );
