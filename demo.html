@@ -122,15 +122,18 @@
     }
 
     function initText(x, y, z){
-      initCenter(x, y, z);
+    var center_point = new THREE.Group();
+      center_point.position.set( x, y, z );
+      scene.add( center_point );   
+
       var loader = new THREE.FontLoader();
 
       loader.load( 'fonts/optimer_regular.typeface.json', function ( font ) {
 
         var textGeometry = new THREE.TextGeometry( 'NEKO', {
           font: font,
-          size: 1.0,
-          height: 1,
+          size: 0.7,
+          height: 0.1,
           curveSegments: 0,
           bevelThickness: 0,
           bevelSize: 0,
@@ -169,7 +172,7 @@
         // mesh3.position.z = 2;
           // mesh3.position.y = 3;
           // mesh3.position.x = -0.5;
-          mesh3.position.set( 0, 0, 2 );
+          mesh3.position.set( 0, 0, 1.2 );
         // オブジェクトをシーンに追加
         //scene.add( text );
         // scene.add( mesh3 );
@@ -190,11 +193,6 @@
         render();    
     }
 
-    function initCenter(x, y, z){
-    var center_point = new THREE.Group();
-      center_point.position.set( x, y, z );
-      scene.add( center_point );      
-    }
 
     function init(){
 
@@ -202,24 +200,24 @@
       
       // initCenter();
 
-      initEarth(0, 0, 0);
+      // initEarth(0, 0, 0);
 
-      initEarth(0, 3, 0);
+      initEarth(0, 2, 0);
 
-      initEarth(3, 0, 0);
+      initEarth(2, 0, 0);
 
-      initEarth(0, -3, 0);
+      initEarth(0, -2, 0);
 
-      initEarth(-3, 0, 0);
+      initEarth(-2, 0, 0);
 
 
-      initText(0, 3, 0);
+      initText(0, 2, 0);
 
-      initText(3, 0, 0);
+      initText(2, 0, 0);
 
-      // initText(0, -3, 0);
+      initText(0, -2, 0);
 
-      // initText(-3, 0, 0);
+      initText(-2, 0, 0);
       
       // initText();
 
